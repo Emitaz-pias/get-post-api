@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=, initial-scale=1.0" />
+    <title>Json</title>
+  </head>
+  <body>
+    <h1>Json placeholder</h1>
+    <h2>how to show a data from backend</h2>
+    <ul id="li-container"></ul>
+    <input type="text" name="" placeholder="title" id="title" /><br />
+    <input type="text" name="" placeholder="body" id="bodyContent" /><br />
+    <button id="submitBtn" type="submit">send data</button>
+    <script>
+      // get data from get api
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json())
+        .then((json) => displayUser(json));
+
+      displayUser = (user) => {
+        const userNames = user.map((user) => user.username);
+        for (let i = 0; i < userNames.length; i++) {
+          const userName = userNames[i];
+          const ul = document.getElementById("li-container");
+          const li = document.createElement("li");
+          li.innerText = userName;
+          ul.appendChild(li);
+        }
+      };
+      // send data to server with post api
+      postToServer = (postInfo) => {
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+          method: "POST",
+          body: JSON.stringify(postInfo),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => console.log(json));
+      };
+      // get data from front end input
+      document.getElementById("submitBtn").addEventListener("click", () => {
+        const title = document.getElementById("title").value;
+        const body = document.getElementById("bodyContent").value;
+        const post = { title: title, body: body };
+        postToServer(post);
+      });
+    </script>
+  </body>
+</html>
